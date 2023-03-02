@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using API.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace API.ViewModels
 {

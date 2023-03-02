@@ -32,7 +32,7 @@ namespace API.Models
         [JsonIgnore]
         public Account? Account  { get; set; }
         [JsonIgnore]
-        public ICollection<Employee> Employees { get; set; }
+        public ICollection<Employee>? Employees { get; set; }
         [JsonIgnore]
         public Employee? Manager { get; set; }
     }
