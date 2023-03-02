@@ -99,4 +99,34 @@ public class AccountRepository : GeneralRepository<int, Account>
         }
         return Hashing.ValidatePassword(loginVM.Password, result.Password);
     }
+
+    public async Task<UserdataVM> GetUserdata(string key)
+    {
+        var userdata = (from e in context.Employees
+                        join a in context.Accounts
+                        on e.Nik equals a.EmployeeNik
+                        join ar in context.AccountRoles
+                        on a.EmployeeNik equals ar.AccountNik
+                        join r in context.Roles
+                        on ar.RoleId equals r.Id
+                        where e.Email == key
+                        select new UserdataVM
+                        {
+                            Email = e.Email,
+                            FullName = String.Concat(e.FirstName, " ", e.LastName),
+
+                        }).SingleOrDefaultAsync();
+
+        return await userdata;
+    }
+
+    public async Task<IEnumerable<string>>  GetRolesByNik(string key)
+    {
+        var  getNik = context.Employees.FirstOrDefault(e => e.Email == key);
+        return await context.AccountRoles.Where(ar => ar.AccountNik == getNik.Nik).Join(
+            context.Roles,
+            ar => ar.RoleId,
+            r => r.Id,
+            (ar, r) => r.Name).ToListAsync();
+    }
 }
